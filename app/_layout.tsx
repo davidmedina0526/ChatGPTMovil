@@ -1,39 +1,18 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { Stack } from "expo-router";
+import { AuthProvider } from "../context/authContext/AuthContext";
+import { DataProvider } from "@/context/dataContext/DataContext";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <DataProvider>
+        <AuthProvider>
+          <Stack>
+            <Stack.Screen name = "index" options = {{ title: "Welcome to ChatGPT", headerShown: false }} />
+            <Stack.Screen name = "chatScreen" options = {{ title: "ChatGPT", headerShown: false }} />
+            <Stack.Screen name = "loginScreen" options = {{ title: "Log in to ChatGPT", headerShown: false }} />
+            <Stack.Screen name = "signupScreen" options = {{ title: "Sign up to ChatGPT", headerShown: false }} />
+          </Stack>
+      </AuthProvider>
+    </DataProvider>
   );
 }
