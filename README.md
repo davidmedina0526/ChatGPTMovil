@@ -38,7 +38,7 @@ Este proyecto se basa en una aplicación de chat impulsada por IA, construida co
 
 ## Guía de uso
 
-**Paso 1.** Clonar el repositorio en tu máquina local.
+**Paso 1.** Clonar el repositorio en tu máquina local.<br />
 **Paso 2.** Instalar las dependencias usando:
 
 npm install
