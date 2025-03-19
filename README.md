@@ -1,50 +1,52 @@
-# Welcome to your Expo app 👋
+# David Medina - ChatGPT
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este proyecto se basa en una aplicación de chat impulsada por IA, construida con **React Native**, **Expo**, **TypeScript** y **Firebase**. Permite a los usuarios crear cuentas, iniciar sesión, gestionar sus conversaciones y recibir respuestas de un modelo de lenguaje, más concretamente de la API de Google Gemini.
 
-## Get started
+---
 
-1. Install dependencies
+## Características principales
 
-   ```bash
-   npm install
-   ```
+1. **Autenticación de usuarios**: Registro e inicio de sesión con Firebase Authentication.  
+2. **Gestión de chats**: Crear, listar y eliminar conversaciones por usuario.  
+3. **Persistencia de mensajes**: Los mensajes se almacenan en Firestore, asociados a cada usuario por separado.  
+4. **Contextos globales**:  
+   - **AuthContext** para manejar la autenticación del usuario.  
+   - **DataContext** para realizar operaciones CRUD con chats y mensajes.
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## Estructura de carpetas
 
-In the output, you'll find options to open the app in a
+1. **app**: Contiene todos los archivos de funcionalidad de la aplicación. Allí se encuentran:
+   - *_layout.tsx*: Componente raíz de navegación y proveedores de contexto.
+   - *chatScreen.tsx*: Pantalla principal del chat.
+   - *index.tsx*: Pantalla de bienvenida al usuario. Contiene información de la aplicación.
+   - *loginScreen.tsx*: Pantalla de inicio de sesión del usuario.
+   - *signupScreen.tsx*: Pantalla de registro de nueva cuenta de usuario.
+2. **assets**: Contiene los recursos estáticos que usa la aplicación (imágenes, fuente de texto, etc.).
+3. **context**: Contiene los archivos de lógica de la aplicación. Allí se encuentran:
+   - *AuthContext.tsx*: Contiene la lógica de autenticación y manejo de estado del usuario utilizando Firebase Authentication.
+   - *DataContext.tsx*: Contiene la lógica para las operaciones de chat usando Firestore Database.
+4. **interfaces**: Guarda en su interior los archivos:
+   - *AppInterfaces.ts*: Interfaces para mensajes, contenido, etc.
+   - *Responses.ts*: Interfaces específicas para las respuestas de la API.
+5. **utils**: Contiene funciones específicas de configuración de la aplicación:
+   - *chatService.ts*: Funciones CRUD para Firestore (creación, obtención y eliminación de chats).
+   - *FirebaseConfig.ts*: Archivo de configuración de Firebase.
+  
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Guía de uso
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+**Paso 1.** Clonar el repositorio en tu máquina local.<br />
+**Paso 2.** Instalar las dependencias usando:
 
-## Get a fresh project
+npm install
 
-When you're ready, run:
+**Paso 3.** Iniciar la aplicación usando el comando:
 
-```bash
-npm run reset-project
-```
+npm start
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+o el comando:
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+npx expo start
