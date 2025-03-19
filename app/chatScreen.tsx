@@ -1,4 +1,3 @@
-// chatScreen.tsx
 import React, { useState, useEffect, useContext } from 'react';
 import Markdown from 'react-native-markdown-display';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, Switch, ScrollView } from 'react-native';
@@ -36,7 +35,7 @@ export default function ChatScreen() {
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [chatsList, setChatsList] = useState<any[]>([]);
 
-  // Actualiza la lista de chats del usuario cada vez que cambie currentChatId o userId
+  // Actualizar la lista de chats del usuario
   useEffect(() => {
     if (userId) {
       fetchChats(userId).then(chats => setChatsList(chats));
@@ -70,7 +69,6 @@ export default function ChatScreen() {
       );
       const data: APIResponse = await response.json();
       const botResponseText = data?.candidates[0]?.content?.parts[0]?.text;
-      // Reemplaza el mensaje placeholder "Reasoning..." con la respuesta real del bot
       setMessages(prevMessages => {
         const newMessages = [...prevMessages];
         newMessages[newMessages.length - 1] = {
@@ -102,17 +100,15 @@ export default function ChatScreen() {
     setMenuOpen(!menuOpen);
   };
 
-  /** Crea un nuevo chat en Firestore asignándole el UID del usuario y limpia los mensajes */
+  // Crear un nuevo chat en Firestore asignándole el UID del usuario
   const handleNewChat = async () => {
     if (!userId) return;
     setMenuOpen(false);
-    // Se crea un chat con título inicial "Nuevo Chat"
     const newChatId = await createChat(userId, "Nuevo Chat");
     if (newChatId) {
       setCurrentChatId(newChatId);
       setMessages([]);
       console.log('Nuevo chat creado con ID:', newChatId);
-      // Actualiza la lista de chats del usuario
       fetchChats(userId).then(chats => setChatsList(chats));
     }
   };
@@ -135,13 +131,12 @@ export default function ChatScreen() {
       await updateChatTitle(currentChatId, userMsg.text);
     }
     
-    // Agrega el mensaje del usuario a la UI y a Firestore
+    // Agregar el mensaje del usuario a la UI y a Firestore
     setMessages(prev => [...prev, userMsg]);
     if (currentChatId) {
       await addMessageToChat(currentChatId, userMsg);
     }
   
-    // Muestra el placeholder "Reasoning..." solo en la UI
     const placeholderMsg: Message = {
       text: "Reasoning...",
       sent_by: "Bot",
@@ -175,14 +170,13 @@ export default function ChatScreen() {
         state: "Delivered"
       };
   
-      // Actualiza la UI reemplazando el placeholder con el mensaje real
       setMessages(prev => {
         const newMessages = [...prev];
         newMessages[newMessages.length - 1] = botMsg;
         return newMessages;
       });
   
-      // Guarda en Firestore la respuesta real del bot
+      // Guardar en Firestore la respuesta real del bot
       if (currentChatId) {
         await addMessageToChat(currentChatId, botMsg);
       }
@@ -203,7 +197,7 @@ export default function ChatScreen() {
     }
   };
 
-  // Al seleccionar un chat de la lista se carga la conversación
+  // Al seleccionar un chat de la lista, se carga la conversación almacenada en Firestore
   const handleSelectChat = async (chatId: string) => {
     if (!userId) return;
     const chatData = await loadChat(chatId);
@@ -214,7 +208,7 @@ export default function ChatScreen() {
     setMenuOpen(false);
   };
 
-  // Borra todos los chats del usuario actual y actualiza la lista
+  // Borrar todos los chats del usuario actual y actualizar la lista
   const handleClearChats = async () => {
     if (!userId) return;
     await deleteAllChats(userId);
@@ -230,7 +224,6 @@ export default function ChatScreen() {
         <Text style={[styles.menuItemText, { color: textColor }]}>New Chat</Text>
         <Text style={[styles.menuItemText, { color: textColor }]}>❯</Text>
       </TouchableOpacity>
-      {/* Sección para listar los chats creados del usuario */}
       <ScrollView style={styles.chatsList}>
         {chatsList.map((chat) => (
           <TouchableOpacity

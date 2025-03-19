@@ -1,4 +1,3 @@
-// LoginScreen.tsx
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { AuthContext } from '../context/authContext/AuthContext';

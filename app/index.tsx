@@ -1,4 +1,3 @@
-// index.tsx
 import React, { useState } from 'react';
 import { Image, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
@@ -85,7 +84,6 @@ export default function WelcomeScreen() {
             <TouchableOpacity style={styles.buttons} onPress={handlePrevious}>
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
-            {/* Al presionar "Let's Chat" se redirige a la pantalla de Login */}
             <Link href='../loginScreen' style={styles.buttons}>
               <Text style={styles.buttonText}>Let's Chat ➜</Text>
             </Link>
