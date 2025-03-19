@@ -1,6 +1,6 @@
 // SignupScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
@@ -10,13 +10,14 @@ export default function SignupScreen() {
     OCRA: require('../assets/fonts/OCRA.ttf'),
   });
 
+  if (!fontsLoaded) return null;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const auth = getAuth();
-
-  if (!fontsLoaded) return null;
 
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,28 +25,28 @@ export default function SignupScreen() {
   };
 
   const handleSignup = async () => {
+    setErrorMessage('');
     if (!validateEmail(email)) {
-      Alert.alert("Error", "Por favor ingrese un correo electrónico válido (ejemplo@dominio.com).");
+      setErrorMessage("Please enter a valid email address (example@domain.com).");
       return;
     }
     if (password.length < 6) {
-      Alert.alert("Error", "La contraseña debe tener mínimo 6 caracteres.");
+      setErrorMessage("Password must be at least 6 characters long.");
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Las contraseñas no coinciden.");
+      setErrorMessage("Passwords do not match.");
       return;
     }
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      // Opcional: crea un registro inicial en Firestore para el usuario aquí
       router.push('/chatScreen');
     } catch (error: any) {
-      console.error("Error al crear usuario:", error);
+      console.error("Error creating user:", error);
       if (error.code === "auth/email-already-in-use") {
-        Alert.alert("Error", "El correo electrónico ya está en uso. Por favor, utiliza otro correo o inicia sesión.");
+        setErrorMessage("Email address already in use. Please try using a different email or log in.");
       } else {
-        Alert.alert("Error", "No se pudo crear el usuario. Inténtalo de nuevo.");
+        setErrorMessage("User could not be created. Please try again later.");
       }
     }
   };
@@ -53,26 +54,30 @@ export default function SignupScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
+      {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}
       <TextInput 
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#AAA"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={text => { setEmail(text); setErrorMessage(''); }}
         keyboardType="email-address"
         autoCapitalize="none"
       />
       <TextInput 
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#AAA"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={text => { setPassword(text); setErrorMessage(''); }}
         secureTextEntry
       />
       <TextInput 
         style={styles.input}
         placeholder="Confirm password"
+        placeholderTextColor="#AAA"
         value={confirmPassword}
-        onChangeText={setConfirmPassword}
+        onChangeText={text => { setConfirmPassword(text); setErrorMessage(''); }}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
@@ -91,14 +96,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center', 
     backgroundColor: '#3A3D4A' 
-},
+  },
   title: { 
     color: '#FFFFFF',
     fontSize: 24, 
     fontWeight: 'bold',
     marginBottom: '5%', 
     fontFamily: 'OCRA' 
-},
+  },
   input: { 
     fontFamily: 'OCRA', 
     color: '#FFFFFF',
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 15, 
     padding: 10, 
     borderRadius: 5 
-},
+  },
   button: { 
     backgroundColor: '#0FA958', 
     padding: 15, 
@@ -118,15 +123,22 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     marginTop: '2%',
     marginBottom: '3%' 
-},
+  },
   buttonText: { 
     color: '#FFF', 
     fontSize: 16, 
     fontWeight: 'bold',
     fontFamily: 'OCRA' 
-},
+  },
   linkText: { 
     color: '#0FA958', 
     fontSize: 14, 
-    fontFamily: 'OCRA' },
+    fontFamily: 'OCRA' 
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: '1%',
+    fontFamily: 'OCRA',
+    textAlign: 'center'
+  },
 });

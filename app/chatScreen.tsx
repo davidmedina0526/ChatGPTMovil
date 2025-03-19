@@ -1,5 +1,6 @@
 // chatScreen.tsx
 import React, { useState, useEffect, useContext } from 'react';
+import Markdown from 'react-native-markdown-display';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, Switch, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Link } from 'expo-router';
@@ -299,14 +300,20 @@ export default function ChatScreen() {
                     : { ...styles.botBubble, backgroundColor: botBubbleColor },
                 ]}
               >
-                <Text
-                  style={[
-                    styles.bubbleText,
-                    { color: msg.sent_by === "User" ? "#FFF" : botBubbleTextColor },
-                  ]}
-                >
-                  {msg.text}
-                </Text>
+                {msg.sent_by === "Bot" ? (
+                  <Markdown style={{ body: { color: botBubbleTextColor, fontFamily: 'OCRA' } }}>
+                    {msg.text}
+                  </Markdown>
+                ) : (
+                  <Text
+                    style={[
+                      styles.bubbleText,
+                      { color: msg.sent_by === "User" ? "#FFF" : botBubbleTextColor },
+                    ]}
+                  >
+                    {msg.text}
+                  </Text>
+                )}
               </View>
             ))}
           </ScrollView>

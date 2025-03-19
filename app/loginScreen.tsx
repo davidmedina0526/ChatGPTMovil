@@ -1,6 +1,6 @@
 // LoginScreen.tsx
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { AuthContext } from '../context/authContext/AuthContext';
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
@@ -14,6 +14,7 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   
   const { signIn } = useContext(AuthContext);
@@ -24,39 +25,45 @@ export default function LoginScreen() {
   };
 
   const handleLogin = async () => {
+    // Limpiar mensaje de error previo
+    setErrorMessage('');
+
     if (!validateEmail(email)) {
-      Alert.alert("Error", "Por favor ingrese un correo electrónico válido (ejemplo@dominio.com).");
+      setErrorMessage("Please enter a valid email address (example@domain.com).");
       return;
     }
     if (password.length < 6) {
-      Alert.alert("Error", "La contraseña debe tener mínimo 6 caracteres.");
+      setErrorMessage("Password must be at least 6 characters long.");
       return;
     }
     try {
       await signIn(email, password);
       router.push('/chatScreen');
     } catch (error: any) {
-      console.error("Error al iniciar sesión:", error);
-      Alert.alert("Error", "Usuario o contraseña incorrectos.");
+      console.error("Error logging in:", error);
+      setErrorMessage("Invalid credentials.");
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log in to ChatGPT</Text>
+      {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}
       <TextInput 
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#AAA"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={text => { setEmail(text); setErrorMessage(''); }}
         keyboardType="email-address"
         autoCapitalize="none"
       />
       <TextInput 
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#AAA"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={text => { setPassword(text); setErrorMessage(''); }}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -113,5 +120,11 @@ const styles = StyleSheet.create({
     color: '#0FA958', 
     fontSize: 14, 
     fontFamily: 'OCRA' 
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: '1%',
+    fontFamily: 'OCRA',
+    textAlign: 'center'
   },
 });
