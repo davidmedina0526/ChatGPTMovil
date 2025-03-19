@@ -4,7 +4,7 @@
     "slug": "ChatGPT2025",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/ChatGPT-logo-new.png",
+    "icon": "./assets/images/AppLogo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/AppLogo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.medina.ds0526.ChatGPT2025"
@@ -21,19 +21,19 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/AppLogo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/ChatGPT-logo-new.png",
+          "image": "./assets/images/AppLogo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
-            "image": "./assets/images/ChatGPT-logo-new.png",
+            "image": "./assets/images/AppLogo.png",
             "backgroundColor": "#000000"
           }
         }
@@ -49,6 +49,11 @@
       "eas": {
         "projectId": "71d12e29-e5a5-4851-a0ae-4c7ff9857cbb"
       }
+    },
+    "splash": {
+      "image": "./assets/images/AppLogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     }
   }
 }
